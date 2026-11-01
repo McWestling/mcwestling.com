@@ -4,4 +4,4 @@ The workspace values the skills read are in [`docs/issue-tracker.md`](docs/issue
 
 ## Scripts
 
-Write repo scripts in Python 3 using only the standard library, with `unittest` tests next to them (`<name>.test.py`). McWestling standardized on Python for tooling (see DO-1392); don't add Ruby, Node or shell scripts for this kind of work.
+Write scripts in TypeScript by default, run directly with Node (no build step). Use Python 3 with only the standard library for tools that ship into repos regardless of their stack, like [Factory Verify](https://linear.app/mcwestling/project/factory-verify-00114d9892fe/overview), or when Python's standard library makes the script much simpler, like parsing TOML. Don't add Ruby, or shell scripts longer than a few lines.
