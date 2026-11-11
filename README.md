@@ -13,4 +13,3 @@ Anyone who comes across the McWestling name and wants to know who we are or how 
 ## Links
 
 - [Agent instructions](AGENTS.md)
-- [Issue tracker config](docs/issue-tracker.md)
