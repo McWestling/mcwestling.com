@@ -1,0 +1,13 @@
+{
+  "name": "mcwestling-com",
+  "compatibility_date": "2026-11-25",
+  "assets": {
+    "directory": "./dist"
+  },
+  "routes": [
+    {
+      "pattern": "mcwestling.com",
+      "custom_domain": true
+    }
+  ]
+}

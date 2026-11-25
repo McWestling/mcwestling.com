@@ -1,0 +1,43 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="McWestling" description="McWestling is a family product company.">
+  <main aria-label="McWestling landing page">
+    <section class="masthead" aria-label="McWestling">
+      <div class="brand">
+        <h1 aria-label="McWestling">
+          <span aria-hidden="true">Mc</span><span
+            class="wordmark-westling"
+            aria-hidden="true">Westling</span
+          >
+        </h1>
+      </div>
+      <div class="castle-window-fill" aria-hidden="true">
+        <span class="window-left-top"></span>
+        <span class="window-left-bottom"></span>
+        <span class="window-center-left"></span>
+        <span class="window-center-right"></span>
+        <span class="window-right-top"></span>
+        <span class="window-right-bottom"></span>
+      </div>
+      <a class="logo-wrap" href="/about/" aria-label="About McWestling">
+        <img
+          class="logo"
+          src="assets/mcwestling-logo-window-cutouts.png"
+          alt="McWestling castle logo"
+          width="1024"
+          height="1024"
+        />
+      </a>
+      <div class="gigi-stage" aria-hidden="true"></div>
+    </section>
+    <section class="contact" aria-label="Contact links">
+      <nav class="links" aria-label="McWestling links">
+        <a href="mailto:inquiries@mcwestling.com">inquiries@mcwestling.com</a>
+        <a href="https://github.com/mcwestling">GitHub</a>
+        <a href="/about/">About</a>
+      </nav>
+    </section>
+  </main>
+</Layout>

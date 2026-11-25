@@ -1,7 +1,7 @@
 "$schema" = "https://conductor.build/schemas/settings.repo.schema.json"
 
 [scripts]
-setup = "true"
-run = 'PORT=${CONDUCTOR_PORT:-4173}; echo "http://localhost:$PORT"; ruby -run -e httpd . -p "$PORT"'
+setup = "npm install"
+run = 'PORT=${CONDUCTOR_PORT:-4173}; echo "http://localhost:$PORT"; npm run dev -- --port "$PORT"'
 archive = "true"
 run_mode = "concurrent"
