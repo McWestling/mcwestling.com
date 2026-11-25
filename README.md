@@ -22,7 +22,7 @@ Needs Node 22.23.4 or later.
 
 Pages are in `src/pages/`: a new markdown file there becomes a page in the shared layout, `src/layouts/Layout.astro`. `public/` holds `styles.css`, `app.js` and the images, which ship as they are.
 
-Cloudflare builds and deploys every push to `main` as a Worker with static assets, set up in `wrangler.jsonc`.
+Cloudflare builds and deploys every push to `main` as a Worker with static assets, set up in `wrangler.jsonc`. Pushes to other branches get a preview deploy, and Cloudflare comments its URL on the pull request. Preview URLs are public.
 
 ## Links
 

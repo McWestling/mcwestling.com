@@ -4,6 +4,8 @@
   "assets": {
     "directory": "./dist"
   },
+  "preview_urls": true,
+  "previews": {},
   "routes": [
     {
       "pattern": "mcwestling.com",
