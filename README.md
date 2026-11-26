@@ -27,3 +27,4 @@ Cloudflare builds and deploys every push to `main` as a Worker with static asset
 ## Links
 
 - [Agent instructions](AGENTS.md)
+
