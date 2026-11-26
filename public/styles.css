@@ -3,6 +3,7 @@
   --ground-link: #51493e;
   --ink: #17130f;
   --paper: #f7f2e8;
+  --sheet-shadow: rgb(43 35 26 / 24%);
   --horizon: 50vh;
   --logo-size: min(clamp(21rem, 30vw, 30rem), 86vw, 35rem);
   --logo-ground-depth: clamp(5rem, 10vw, 9rem);
@@ -308,6 +309,7 @@ a:focus-visible {
     --ground-link: #a99f8e;
     --ink: #eee6d6;
     --paper: #171716;
+    --sheet-shadow: rgb(0 0 0 / 45%);
   }
 
   .logo-wrap {
@@ -376,9 +378,13 @@ a:focus-visible {
   text-decoration: none;
 }
 
+/* A sheet of paper standing over the horizon. The header and footer stay off it. */
 .page-content {
-  max-width: 42rem;
+  max-width: 48rem;
   margin: clamp(3rem, 12vh, 8rem) auto 0;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  background: var(--paper);
+  box-shadow: 0 1.25rem 1.7rem var(--sheet-shadow);
   font-size: clamp(1.08rem, 1.8vw, 1.25rem);
   line-height: 1.65;
 }
@@ -448,5 +454,7 @@ a:focus-visible {
 
   .page-content {
     margin-top: 3.5rem;
+    /* Widen the sheet on phones so its padding doesn't squeeze the text. */
+    margin-inline: -0.5rem;
   }
 }
