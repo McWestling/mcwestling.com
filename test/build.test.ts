@@ -40,3 +40,32 @@ test("wrangler serves the build output at mcwestling.com", () => {
   assert.ok(existsSync(new URL("../dist/styles.css", import.meta.url)));
   assert.ok(existsSync(new URL("../dist/app.js", import.meta.url)));
 });
+
+test("the nav reads About, Products, Contact on content pages", () => {
+  for (const path of ["/about/", "/privacy/", "/products/", "/products/factory/"]) {
+    const nav = page(path).match(/<header class="page-header">[\s\S]*?(<nav[\s\S]*?<\/nav>)/)?.[1] ?? "";
+    const links = [...nav.matchAll(/<a [^>]*>([^<]+)<\/a>/g)].map((m) => m[1]);
+    assert.deepEqual(links, ["About", "Products", "Contact"], path);
+  }
+});
+
+test("/products/ lists Factory with its pitch, linking to its page", () => {
+  const html = page("/products/");
+  assert.match(html, /<title>Products · McWestling<\/title>/);
+  assert.match(html, /<a href="\/products\/factory\/">Factory<\/a>/);
+  assert.match(html, /Factory turns ideas into finished software changes/);
+});
+
+test("/products/factory/ renders Factory's PUBLIC.md on the sheet", () => {
+  const html = page("/products/factory/");
+  assert.match(html, /<title>Factory · McWestling<\/title>/);
+  assert.match(html, /<article class="page-content">\s*<h1[^>]*>Factory<\/h1>/);
+  assert.match(html, /<a href="https:\/\/github\.com\/mcwestling\/factory">/);
+  assert.match(html, /<h2[^>]*>What it does<\/h2>/);
+  assert.match(html, /class="site-footer"/);
+  assert.match(html, /src="\/app\.js"/);
+});
+
+test("About links Factory to its product page", () => {
+  assert.match(page("/about/"), /<a href="\/products\/factory\/">Factory<\/a>/);
+});

@@ -1,0 +1,20 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const products = await getCollection("products");
+  return products.map((product) => ({ params: { slug: product.id }, props: { product } }));
+}
+
+const { product } = Astro.props;
+const { name, pitch, url } = product.data;
+const { Content } = await render(product);
+---
+
+<Layout title={name} description={pitch}>
+  <h1>{name}</h1>
+  <p>{pitch}</p>
+  {url && <p><a href={url}>{url.replace(/^https?:\/\//, "")}</a></p>}
+  <Content />
+</Layout>
