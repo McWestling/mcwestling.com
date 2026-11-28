@@ -3,7 +3,7 @@ name: Factory
 pitch: The Factory turns ideas into finished software changes, with coding agents we can work with wherever we are.
 url: https://github.com/mcwestling/factory
 created: 2026-11-26
-updated: 2026-11-27
+updated: 2026-11-28
 ---
 
 At McWestling we build software with coding agents, programs that can read a project’s code, change it, and run it. The Factory is how we work with them.
@@ -15,6 +15,11 @@ We wanted to be able to choose a problem, go make dinner, and come back to a cha
 Sometimes two projects need our attention. We can choose what’s worth doing on one, talk through a tradeoff with an agent, and turn to the other while the agent builds. Trying what it made gives us another chance to think. Does this solve the problem? Now that we’ve used it, would we ask for something different?
 
 We want to be able to give that input wherever we are. A question that seemed tricky at a desk might have an obvious answer halfway through a subway ride. We can send the answer then, or share an idea between sets at the gym, and let the agent carry on. That feels like a healthier way to work, and it’s one we want to build our lives around.
+
+<figure>
+<img src="images/sorting.svg" width="392" alt="Sorting the work: a line of plain squares runs into a station and comes out as built blocks. One square marked with a question mark, a decision, is still on the line; another has been lifted off to a human, who thinks it over, hand on chin, under a lit orange lamp while speech and thought bubbles rise. A square with a check mark, a decision already settled, is back on the line.">
+<figcaption>Most of the work runs straight through to the agents and comes out built. The pieces that are really decisions are lifted off for us to settle, then go back on the line.</figcaption>
+</figure>
 
 ## How an idea becomes a finished change
 

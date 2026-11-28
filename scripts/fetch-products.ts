@@ -1,5 +1,6 @@
 // Copies each published product's public page from its repo's `docs/public-page/` folder:
-// README.md into src/content/products/<slug>.md, and images/ into public/products/<slug>/images/.
+// README.md into src/content/products/<slug>.md, and images/ into public/products/<slug>/images/,
+// giving each SVG drawing this site's colours on the way.
 // Run it with `node scripts/fetch-products.ts`; it reads repos with your logged-in `gh`.
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -34,6 +35,20 @@ export function checkDrawings(product: Product, text: string, drawings: string[]
     }
   }
 }
+
+// The contract's black, white and grays (docs/public-page-contract.md in Factory), swapped for this site's colours.
+const palette: Record<string, string> = {
+  "--ink:#000": "--ink:#17130f",
+  "--ink:#fff": "--ink:#eee6d6",
+  "--tone:#888": "--tone:#8f8372",
+  "--tone:#999": "--tone:#a99f8e",
+  "--on:#000": "--on:#17130f",
+  "--mark:#444": "--mark:#e0632a",
+  "--mark:#bbb": "--mark:#e0632a",
+};
+
+// Gives an SVG drawing this site's colours. A colour the contract doesn't name is left as it is.
+export const tint = (svg: string) => svg.replace(/--(?:ink|tone|on|mark):#[0-9a-f]{3,6}\b/g, (set) => palette[set] ?? set);
 
 // Reads one path from the repo's default branch, as bytes: a file as it is, or a folder as a JSON listing.
 function read(product: Product, path: string) {
@@ -77,7 +92,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       const folder = new URL(`public/products/${product.slug}/images/`, root);
       rmSync(folder, { recursive: true, force: true });
       if (drawings.length) mkdirSync(folder, { recursive: true });
-      for (const name of drawings) writeFileSync(new URL(name, folder), read(product, `${source}/images/${name}`));
+      for (const name of drawings) {
+        const bytes = read(product, `${source}/images/${name}`);
+        writeFileSync(new URL(name, folder), name.endsWith(".svg") ? tint(bytes.toString()) : bytes);
+      }
       writeFileSync(new URL(`src/content/products/${product.slug}.md`, root), text);
       console.log(`Wrote src/content/products/${product.slug}.md and ${drawings.length} images`);
     }
