@@ -380,13 +380,13 @@ a:focus-visible {
 
 /* A sheet of paper standing over the horizon. The header and footer stay off it. */
 .page-content {
-  max-width: 48rem;
+  max-width: 44rem;
   margin: clamp(3rem, 12vh, 8rem) auto 0;
   padding: clamp(1.5rem, 5vw, 3rem);
   background: var(--paper);
   box-shadow: 0 1.25rem 1.7rem var(--sheet-shadow);
-  font-size: clamp(1.08rem, 1.8vw, 1.25rem);
-  line-height: 1.65;
+  font-size: 1.0625rem;
+  line-height: 1.55;
 }
 
 .page-content h1,
@@ -402,17 +402,17 @@ a:focus-visible {
 }
 
 .page-content h1 {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1rem;
   font-size: clamp(3rem, 8vw, 5rem);
 }
 
 .page-content h2 {
-  margin: 2.5rem 0 0.75rem;
+  margin: 3.5rem 0 1rem;
   font-size: clamp(2rem, 5vw, 3rem);
 }
 
 .page-content p {
-  margin: 0 0 1.25rem;
+  margin: 0 0 1.1em;
 }
 
 .page-content ul {
@@ -421,7 +421,7 @@ a:focus-visible {
 }
 
 .page-content li + li {
-  margin-top: 0.65rem;
+  margin-top: 0.4rem;
 }
 
 /* A link that leaves the site carries a small arrow leaving a square. The layout opens it in a new tab. */
@@ -452,7 +452,7 @@ a:focus-visible {
 }
 
 .page-content h3 {
-  margin: 2rem 0 0.5rem;
+  margin: 2.5rem 0 0.6rem;
   font-size: 1.15em;
 }
 
@@ -481,7 +481,7 @@ a:focus-visible {
 }
 
 .page-content figure {
-  margin: 2rem 0;
+  margin: 2.5rem 0;
 }
 
 .page-content figure img,
@@ -496,9 +496,11 @@ a:focus-visible {
   width: 100%;
 }
 
+/* The dates sit close under the product's link, then a gap before the page begins. */
 .page-content .dates {
+  margin: -0.6rem 0 2.5rem;
   color: var(--ground-link);
-  font-size: 0.85em;
+  font-size: 0.8rem;
 }
 
 .page-content figcaption {

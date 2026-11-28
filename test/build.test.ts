@@ -62,7 +62,7 @@ test("/products/factory/ renders Factory's public page on the sheet", () => {
   assert.match(html, /<article class="page-content">\s*<h1[^>]*>Factory<\/h1>/);
   assert.match(html, /<a href="https:\/\/github\.com\/mcwestling\/factory">/);
   assert.match(html, /<h2[^>]*>Why we built it<\/h2>/);
-  assert.match(html, /Published <time datetime="2026-11-26">November 26, 2026<\/time> · Updated <time datetime="\d{4}-\d{2}-\d{2}">/);
+  assert.match(html, /<time datetime="2026-11-26">Nov 26, 2026<\/time> · updated <time datetime="\d{4}-\d{2}-\d{2}">/);
   // Links that leave the site get a new tab from the layout's script; the link home doesn't match its selector.
   assert.match(html, /a\.target = "_blank"/);
   assert.match(html, /<a href="https:\/\/linear\.app">Linear<\/a>/);
