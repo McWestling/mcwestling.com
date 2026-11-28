@@ -56,12 +56,24 @@ test("/products/ lists Factory with its pitch, linking to its page", () => {
   assert.match(html, /Factory turns ideas into finished software changes/);
 });
 
-test("/products/factory/ renders Factory's PUBLIC.md on the sheet", () => {
+test("/products/factory/ renders Factory's public page on the sheet", () => {
   const html = page("/products/factory/");
   assert.match(html, /<title>Factory · McWestling<\/title>/);
   assert.match(html, /<article class="page-content">\s*<h1[^>]*>Factory<\/h1>/);
   assert.match(html, /<a href="https:\/\/github\.com\/mcwestling\/factory">/);
-  assert.match(html, /<h2[^>]*>What it does<\/h2>/);
+  assert.match(html, /<h2[^>]*>Why we built it<\/h2>/);
+  assert.match(html, /Published <time datetime="2026-11-26">November 26, 2026<\/time> · Updated <time datetime="\d{4}-\d{2}-\d{2}">/);
+  // Links that leave the site get a new tab from the layout's script; the link home doesn't match its selector.
+  assert.match(html, /a\.target = "_blank"/);
+  assert.match(html, /<a href="https:\/\/linear\.app">Linear<\/a>/);
+  assert.match(html, /<script defer src="\/live-strip\.js"><\/script>/);
+  assert.ok(existsSync(new URL("../dist/live-strip.js", import.meta.url)));
+  // Every drawing the page shows is published beside it, and the strip has its live version.
+  const drawings = [...html.matchAll(/\bsrc(?:set)?="(images\/[^"]+)"/g)].map((m) => m[1]);
+  assert.ok(drawings.length > 10);
+  for (const path of [...drawings, "images/journey-wide-live.svg", "images/journey-tall-live.svg"]) {
+    assert.ok(existsSync(new URL(`../dist/products/factory/${path}`, import.meta.url)), path);
+  }
   assert.match(html, /class="site-footer"/);
   assert.match(html, /src="\/app\.js"/);
 });

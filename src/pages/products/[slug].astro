@@ -8,7 +8,9 @@ export async function getStaticPaths() {
 }
 
 const { product } = Astro.props;
-const { name, pitch, url } = product.data;
+const { name, pitch, url, created, updated } = product.data;
+const day = (d: Date) => d.toLocaleDateString("en-US", { dateStyle: "long", timeZone: "UTC" });
+const iso = (d: Date) => d.toISOString().slice(0, 10);
 const { Content } = await render(product);
 ---
 
@@ -16,5 +18,13 @@ const { Content } = await render(product);
   <h1>{name}</h1>
   <p>{pitch}</p>
   {url && <p><a href={url}>{url.replace(/^https?:\/\//, "")}</a></p>}
+  <p class="dates">
+    Published <time datetime={iso(created)}>{day(created)}</time> · Updated <time datetime={iso(updated)}>{day(updated)}</time>
+  </p>
   <Content />
+  <script is:inline defer src="/live-strip.js"></script>
+  <script is:inline>
+    for (const h of document.querySelectorAll(".page-content :is(h2, h3)[id]"))
+      h.insertAdjacentHTML("beforeend", `<a class="anchor" href="#${h.id}" aria-label="Link to this section">#</a>`);
+  </script>
 </Layout>

@@ -30,6 +30,15 @@ const current = (href: string) => (path === href ? "page" : undefined);
     <!-- styles.css and app.js live in public/ and ship untouched by the build. -->
     <link rel="stylesheet" href="/styles.css" />
     <script is:inline src="/app.js" defer></script>
+    <!-- Links that leave the site open in a new tab. styles.css gives the same links their arrow icon. -->
+    <script is:inline>
+      addEventListener("DOMContentLoaded", () => {
+        for (const a of document.querySelectorAll('.page-content a[href^="http"]:not([href^="https://mcwestling.com"])')) {
+          a.target = "_blank";
+          a.rel = "noopener";
+        }
+      });
+    </script>
   </head>
   <body>
     {

@@ -1,30 +1,47 @@
-// Copies each published product's PUBLIC.md into src/content/products/<slug>.md.
+// Copies each published product's public page from its repo's `docs/public-page/` folder:
+// README.md into src/content/products/<slug>.md, and images/ into public/products/<slug>/images/.
 // Run it with `node scripts/fetch-products.ts`; it reads repos with your logged-in `gh`.
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 type Product = { slug: string; repo: string };
 
+const source = "docs/public-page";
+
 const label = ({ slug, repo }: Product) => `${slug} (${repo})`;
 
-// Throws unless the text opens with frontmatter holding a non-empty name and pitch.
+// Throws unless the text opens with frontmatter holding a non-empty name and pitch, and created and updated dates.
 export function checkPublic(product: Product, text: string) {
   const frontmatter = text.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? "";
   for (const key of ["name", "pitch"]) {
     if (!new RegExp(`^${key}:[ \\t]*\\S`, "m").test(frontmatter)) {
-      throw new Error(`${label(product)}: PUBLIC.md frontmatter has no \`${key}\``);
+      throw new Error(`${label(product)}: the public page's frontmatter has no \`${key}\``);
+    }
+  }
+  for (const key of ["created", "updated"]) {
+    if (!new RegExp(`^${key}:[ \\t]*\\d{4}-\\d{2}-\\d{2}[ \\t]*$`, "m").test(frontmatter)) {
+      throw new Error(`${label(product)}: the public page's frontmatter needs \`${key}\` as a YYYY-MM-DD date`);
     }
   }
 }
 
-function fetchPublic(product: Product) {
+// Throws if the text shows an image that isn't in the product's `images/` folder.
+export function checkDrawings(product: Product, text: string, drawings: string[]) {
+  for (const [, name] of text.matchAll(/\bsrc(?:set)?="images\/([^"]+)"/g)) {
+    if (!drawings.includes(name)) {
+      throw new Error(`${label(product)}: the public page shows images/${name}, which isn't in the repo`);
+    }
+  }
+}
+
+// Reads one path from the repo's default branch, as bytes: a file as it is, or a folder as a JSON listing.
+function read(product: Product, path: string) {
   try {
-    // The contents API reads the default branch; the raw media type returns the file as it is.
     return execFileSync(
       "gh",
-      ["api", `repos/${product.repo}/contents/PUBLIC.md`, "-H", "Accept: application/vnd.github.raw"],
-      { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+      ["api", `repos/${product.repo}/contents/${path}`, "-H", "Accept: application/vnd.github.raw"],
+      { stdio: ["ignore", "pipe", "pipe"], maxBuffer: 64 * 1024 * 1024 },
     );
   } catch (error) {
     try {
@@ -33,7 +50,17 @@ function fetchPublic(product: Product) {
       throw new Error(`${label(product)}: gh isn't logged in. Run \`gh auth login\`, then rerun.`);
     }
     const reason = String((error as { stderr?: string }).stderr ?? error).trim();
-    throw new Error(`${label(product)}: couldn't read PUBLIC.md from the default branch: ${reason}`);
+    throw new Error(`${label(product)}: couldn't read ${path} from the default branch: ${reason}`);
+  }
+}
+
+// The names of the images beside the page. A product with no `images/` folder has none.
+function listDrawings(product: Product): string[] {
+  try {
+    return JSON.parse(read(product, `${source}/images`).toString()).map((file: { name: string }) => file.name);
+  } catch (error) {
+    if (/404/.test((error as Error).message)) return [];
+    throw error;
   }
 }
 
@@ -42,10 +69,17 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const products: Product[] = JSON.parse(readFileSync(new URL("products.json", root), "utf8"));
   try {
     for (const product of products) {
-      const text = fetchPublic(product);
+      const text = read(product, `${source}/README.md`).toString();
       checkPublic(product, text);
+      const drawings = listDrawings(product);
+      checkDrawings(product, text, drawings);
+      // Start from an empty folder, so an image deleted from the repo is deleted here too.
+      const folder = new URL(`public/products/${product.slug}/images/`, root);
+      rmSync(folder, { recursive: true, force: true });
+      if (drawings.length) mkdirSync(folder, { recursive: true });
+      for (const name of drawings) writeFileSync(new URL(name, folder), read(product, `${source}/images/${name}`));
       writeFileSync(new URL(`src/content/products/${product.slug}.md`, root), text);
-      console.log(`Wrote src/content/products/${product.slug}.md`);
+      console.log(`Wrote src/content/products/${product.slug}.md and ${drawings.length} images`);
     }
   } catch (error) {
     console.error((error as Error).message);
