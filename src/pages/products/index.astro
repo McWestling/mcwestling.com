@@ -1,0 +1,19 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const products = await getCollection("products");
+---
+
+<Layout title="Products" description="The products McWestling builds.">
+  <h1>Products</h1>
+  <ul>
+    {
+      products.map(({ id, data }) => (
+        <li>
+          <strong><a href={`/products/${id}/`}>{data.name}</a></strong>: {data.pitch}
+        </li>
+      ))
+    }
+  </ul>
+</Layout>

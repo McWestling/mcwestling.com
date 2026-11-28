@@ -6,6 +6,7 @@ The workspace values the skills read are in [`docs/issue-tracker.md`](https://gi
 
 - **Full check:** `npm run check` builds the site and runs the tests in `test/` against `dist/`. Run it before every push.
 - **Run the site:** `npm run dev`, or `npm run build` then `npm run preview` for the built output.
+- **Product pages:** `node scripts/fetch-products.ts` copies each product in `products.json` from its repo's `docs/public-page/` folder. Run it only when the maintainer asks, and commit the result.
 - **Deploy:** Cloudflare's Git integration deploys `main`. Don't add a deploy workflow or a Cloudflare token.
 
 ## Scripts

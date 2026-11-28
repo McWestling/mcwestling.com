@@ -1,0 +1,30 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const products = await getCollection("products");
+  return products.map((product) => ({ params: { slug: product.id }, props: { product } }));
+}
+
+const { product } = Astro.props;
+const { name, pitch, url, created, updated } = product.data;
+const day = (d: Date) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+const { Content } = await render(product);
+---
+
+<Layout title={name} description={pitch}>
+  <h1>{name}</h1>
+  <p>{pitch}</p>
+  {url && <p><a href={url}>{url.replace(/^https?:\/\//, "")}</a></p>}
+  <p class="dates">
+    <time datetime={iso(created)}>{day(created)}</time> · updated <time datetime={iso(updated)}>{day(updated)}</time>
+  </p>
+  <Content />
+  <script is:inline defer src="/live-strip.js"></script>
+  <script is:inline>
+    for (const h of document.querySelectorAll(".page-content :is(h2, h3)[id]"))
+      h.insertAdjacentHTML("beforeend", `<a class="anchor" href="#${h.id}" aria-label="Link to this section">#</a>`);
+  </script>
+</Layout>
